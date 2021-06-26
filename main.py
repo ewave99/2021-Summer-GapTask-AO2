@@ -241,7 +241,7 @@ class App:
     def inputMainMenuChoice ( self ):
         user_input = input ( "Enter number of main menu option: " )
 
-        while self.validateRangeBoundNumericChoice ( user_input, 1, 10 ) == False:
+        while self.validateRangeBoundNumericChoice ( user_input, 1, 11 ) == False:
             print ( "Invalid main menu option." )
 
             user_input = input ( "Enter number of main menu option: " )
@@ -557,7 +557,7 @@ class App:
                     csv_reader = csv.DictReader ( file_to_load_from, delimiter=',' )
 
                     for row_dict in csv_reader:
-                        record = Species ( **row_dict )
+                        record = Species ( row_dict [ 'name' ], int ( row_dict [ 'count' ] ) )
                         
                         self.species_data.append ( record )
 
@@ -589,6 +589,8 @@ class App:
 
             plt.title ( "Specimen count for each species seen" )
 
+            plt.ylim ( 0, max ( counts ) )
+
             plt.bar ( range ( len ( counts ) ), counts )
 
             plt.show ()
@@ -596,14 +598,15 @@ class App:
     def displayMainMenu ( self ):
         print ( "MAIN MENU:"                     )
         print ( "(1) Display data as table"      )
-        print ( "(2) Input new data"             )
-        print ( "(3) Edit record"                )
-        print ( "(4) Delete record"              )
-        print ( "(5) Sort records"               )
-        print ( "(6) Clear all current records"  )
-        print ( "(7) Save as CSV"                )
-        print ( "(8) Load data from CSV"         )
-        print ( "(9) Quit"                       )
+        print ( "(2) Display data as bar chart"  )
+        print ( "(3) Input new data"             )
+        print ( "(4) Edit record"                )
+        print ( "(5) Delete record"              )
+        print ( "(6) Sort records"               )
+        print ( "(7) Clear all current records"  )
+        print ( "(8) Save as CSV"                )
+        print ( "(9) Load data from CSV"         )
+        print ( "(10) Quit"                       )
 
         print ()
 
@@ -617,27 +620,30 @@ class App:
                 self.displaySpeciesDataAsTable ()
 
             elif main_menu_choice == 2:
-                self.inputSpeciesData ()
+                self.displaySpeciesDataAsBarChart ()
 
             elif main_menu_choice == 3:
-                self.pickAndEditRecord ()
+                self.inputSpeciesData ()
 
             elif main_menu_choice == 4:
-                self.pickAndDeleteRecord ()
+                self.pickAndEditRecord ()
 
             elif main_menu_choice == 5:
-                self.sortRecords ()
+                self.pickAndDeleteRecord ()
 
             elif main_menu_choice == 6:
-                self.clearCurrentRecords ()
+                self.sortRecords ()
 
             elif main_menu_choice == 7:
-                self.saveAsCSV ()
+                self.clearCurrentRecords ()
 
             elif main_menu_choice == 8:
-                self.loadDataFromCSV ()
+                self.saveAsCSV ()
 
             elif main_menu_choice == 9:
+                self.loadDataFromCSV ()
+
+            elif main_menu_choice == 10:
                 confirmation = input ( "Are you sure you want to quit [y/n]: " )
                 
                 if confirmation.lower () == 'y':
