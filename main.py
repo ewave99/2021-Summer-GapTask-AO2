@@ -19,8 +19,13 @@ Program requirements:
 """
 
 from collections import namedtuple
+
 import re
+
+import os.path
 import csv
+
+from matplotlib import pyplot as plt
 
 Species = namedtuple ( typename="Species", field_names=[ "name", "count" ] )
 
@@ -486,26 +491,111 @@ class App:
     def saveAsCSV ( self ):
         print ( "SAVE AS CSV:" )
 
-        name_to_save_to = self.getFilenameToSaveTo ()
+        if len ( self.species_data ) == 0:
+            print ( "No species data to save." )
+            print ()
 
-        print ( f"Name to save to: \"{name_to_save_to}\"" )
+        else:
+            name_to_save_to = self.getFilenameToSaveTo ()
 
-        with open ( name_to_save_to, mode='w' ) as file_to_save_to:
-            field_names = [ "name", "count" ]
+            if name_to_save_to == ".csv":
+                print ( "Error: filename \".csv\" not allowed." )
+                print ()
 
-            csv_writer = csv.DictWriter ( file_to_save_to, delimiter=',', fieldnames=field_names )
+            else:
+                print ( f"Name to save to: \"{name_to_save_to}\"" )
 
-            csv_writer.writeheader ()
+                with open ( name_to_save_to, mode='w' ) as file_to_save_to:
+                    field_names = [ "name", "count" ]
 
-            for record in self.species_data:
-                csv_writer.writerow ( record._asdict () )
+                    csv_writer = csv.DictWriter ( file_to_save_to, delimiter=',', fieldnames=field_names )
 
-        print ( "Saved." )
+                    csv_writer.writeheader ()
+
+                    for record in self.species_data:
+                        csv_writer.writerow ( record._asdict () )
+
+                print ( "SAVED." )
+                print ()
+
+    def displayModesForLoadingCSV ( self ):
+        print ( "CSV load mode:" )
+        print ( "(1) Append to existing data in memory" )
+        print ( "(2) Overwrite existing data in memory (WARNING: all data will be deleted)" )
+
         print ()
+
+    def inputChoiceOfModeForLoadingCSV ( self ):
+        user_input = input ( "Enter number of chosen option: " )
+
+        while self.validateRangeBoundNumericChoice ( user_input, 1, 3 ) == False:
+            print ( "Invalid option." )
+
+            user_input = input ( "Enter number of chosen option: " )
+
+        print ()
+
+        return user_input
+
+    def loadDataFromCSV ( self ):
+        print ( "LOAD DATA FROM CSV FILE:" )
+
+        self.displayModesForLoadingCSV ()
+
+        load_mode_choice = self.inputChoiceOfModeForLoadingCSV ()
+
+        filename_to_load_from = input ( "Enter filename to load from: " )
+
+        if os.path.exists ( filename_to_load_from ):
+            if load_mode_choice == 1:
+                pass
+            elif load_mode_choice == 2:
+                self.species_data.clear ()
+
+            with open ( filename_to_load_from, mode='r' ) as file_to_load_from:
+                try:
+                    csv_reader = csv.DictReader ( file_to_load_from, delimiter=',' )
+
+                    for row_dict in csv_reader:
+                        record = Species ( **row_dict )
+                        
+                        self.species_data.append ( record )
+
+                    print ( "LOADED DATA." )
+                    print ()
+
+                except Exception as error:
+                    # print ( "Error:", error )
+                    print ( "Invalid CSV file." )
+                    print ()
+
+        else:
+            print ( f"Error: file \"{filename_to_load_from}\" does not exist." )
+            print ()
+
+    def displaySpeciesDataAsBarChart ( self ):
+        if len ( self.species_data ) == 0:
+            print ( "No species data to display." )
+            print ()
+
+        else:
+            counts = [ record.count for record in self.species_data ]
+            names = [ record.name for record in self.species_data ]
+
+            plt.xticks ( range ( len ( names ) ), names )
+
+            plt.xlabel ( "Species name" )
+            plt.ylabel ( "Specimen count" )
+
+            plt.title ( "Specimen count for each species seen" )
+
+            plt.bar ( range ( len ( counts ) ), counts )
+
+            plt.show ()
 
     def displayMainMenu ( self ):
         print ( "MAIN MENU:"                     )
-        print ( "(1) Display data"               )
+        print ( "(1) Display data as table"      )
         print ( "(2) Input new data"             )
         print ( "(3) Edit record"                )
         print ( "(4) Delete record"              )
@@ -544,9 +634,17 @@ class App:
             elif main_menu_choice == 7:
                 self.saveAsCSV ()
 
+            elif main_menu_choice == 8:
+                self.loadDataFromCSV ()
+
             elif main_menu_choice == 9:
-                print ( "QUITTING." )
-                break
+                confirmation = input ( "Are you sure you want to quit [y/n]: " )
+                
+                if confirmation.lower () == 'y':
+                    print ( "QUITTING." )
+                    break
+                else:
+                    print ()
 
 if __name__ == '__main__':
     app = App ()
