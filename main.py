@@ -493,7 +493,7 @@ class App:
         with open ( name_to_save_to, mode='w' ) as file_to_save_to:
             field_names = [ "name", "count" ]
 
-            csv_writer = csv.DictWriter ( file_to_save_to, fieldnames=field_names )
+            csv_writer = csv.DictWriter ( file_to_save_to, delimiter=',', fieldnames=field_names )
 
             csv_writer.writeheader ()
 
