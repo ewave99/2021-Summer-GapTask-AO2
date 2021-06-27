@@ -24,6 +24,8 @@ Program requirements:
 
 ### Setup
 
+#### Unix-based OS
+
 - `git clone https://github.com/ewave99/2021-Summer-GapTask-AO2.git`
 - `cd 2021-Summer-GapTask-AO2`
 - `python3 -m venv venv`
