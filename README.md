@@ -22,8 +22,14 @@ Program requirements:
 
 ## How to use
 
+### Setup
+
 - `git clone https://github.com/ewave99/2021-Summer-GapTask-AO2.git`
 - `cd 2021-Summer-GapTask-AO2`
 - `python3 -m venv venv`
 - `source venv/bin/activate`
 - `python3 -m pip install -r requirements.txt`
+
+### Running
+
+- `python3 main.py`
