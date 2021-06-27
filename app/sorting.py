@@ -2,7 +2,7 @@ from .generic import GenericMethods
 
 class SortingMethods ( GenericMethods ):
     def __init__ ( self ):
-        GenericMethods.__init__ ( self )
+        super ( SortingMethods, self ).__init__ ()
 
     # Methods for sorting records
 

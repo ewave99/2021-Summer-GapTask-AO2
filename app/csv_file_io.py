@@ -6,7 +6,7 @@ from .generic import GenericMethods, Species
 
 class CSVFileIOMethods ( GenericMethods ):
     def __init__ ( self ):
-        GenericMethods.__init__ ( self )
+        super ( CSVFileIOMethods, self ).__init__ ()
 
     # Methods for saving to CSV
 

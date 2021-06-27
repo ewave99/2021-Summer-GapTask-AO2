@@ -2,7 +2,7 @@ from .generic import GenericMethods
 
 class MainMenuMethods ( GenericMethods ):
     def __init__ ( self ):
-        GenericMethods.__init__ ( self )
+        super ( MainMenuMethods, self ).__init__ ()
 
     # Methods for main menu
 
