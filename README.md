@@ -36,6 +36,6 @@ Program requirements:
 
 - `python3 main.py`
 
-# Todos:
+## Todos:
 
 - Finish adding comments to all the files.
