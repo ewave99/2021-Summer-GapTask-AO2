@@ -24,7 +24,7 @@ class MainMenuMethods ( GenericMethods ):
         print ( "(7) Clear all current records"  )
         print ( "(8) Save as CSV"                )
         print ( "(9) Load data from CSV"         )
-        print ( "(10) Quit"                       )
+        print ( "(10) Quit"                      )
 
         print ()
 
