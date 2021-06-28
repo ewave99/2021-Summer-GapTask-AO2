@@ -35,3 +35,7 @@ Program requirements:
 ### Running
 
 - `python3 main.py`
+
+# Todos:
+
+- Finish adding comments to all the files.
