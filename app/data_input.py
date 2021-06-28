@@ -76,7 +76,11 @@ class DataInputMethods:
         return user_input
 
     def validateSpeciesName ( self, string_to_test ):
-        regex_to_match = re.compile ( r"^[a-z0-9]$|^[a-z0-9]+[a-z0-9\-]*([\s][a-z0-9\-]*)*[a-z0-9]+$" )
+        # limitations to species name:
+        # 1. Cannot begin or end with a space
+        # 2. Cannot have 2 or more spaces in a row
+        # 3. Cannot begin or end with a hyphen
+        regex_to_match = re.compile ( r"^[a-z0-9]$|^[^\s\-]+[^\s]*([\s][^\s]*)*[^\s\-]+$" )
 
         if regex_to_match.match ( string_to_test.lower () ):
             return True
