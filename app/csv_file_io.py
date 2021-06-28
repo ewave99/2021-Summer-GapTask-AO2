@@ -58,7 +58,7 @@ class CSVFileIOMethods ( GenericMethods ):
         name_to_save_to = input ( "Enter name to save to: " )
 
         if self.checkFilenameForExtension ( name_to_save_to ) == False:
-            add_csv_extension = inputWhetherWantToAddCSVExtension ()
+            add_csv_extension = self.inputWhetherWantToAddCSVExtension ()
 
             if add_csv_extension == True:
                 name_to_save_to += ".csv"
