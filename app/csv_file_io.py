@@ -29,13 +29,15 @@ class CSVFileIOMethods ( GenericMethods ):
                 print ( f"Name to save to: \"{name_to_save_to}\"" )
 
                 with open ( name_to_save_to, mode='w' ) as file_to_save_to:
-                    field_names = [ "name", "count" ]
-
-                    csv_writer = csv.DictWriter ( file_to_save_to, delimiter=',', fieldnames=field_names )
+                    # specialised csv writer to take in a dict and write a row
+                    # of the csv file. Also handles headers for you
+                    csv_writer = csv.DictWriter ( file_to_save_to, delimiter=',', fieldnames=[ "name", "count" ] )
 
                     csv_writer.writeheader ()
 
                     for record in self.species_data:
+                        # converting each record to dict using ._asdict ()
+                        # method of namedtuple class
                         csv_writer.writerow ( record._asdict () )
 
                 print ( "SAVED." )
@@ -58,6 +60,8 @@ class CSVFileIOMethods ( GenericMethods ):
         name_to_save_to = input ( "Enter name to save to: " )
 
         if self.checkFilenameForExtension ( name_to_save_to ) == False:
+            # ask the user whether they want to add .csv to the end of the
+            # filename.
             add_csv_extension = self.inputWhetherWantToAddCSVExtension ()
 
             if add_csv_extension == True:
@@ -66,7 +70,6 @@ class CSVFileIOMethods ( GenericMethods ):
         return name_to_save_to
 
     def checkFilenameForExtension ( self, string_to_test ):
-        # checks for: any string of characters of length at least 0 + . + any string of characters of length at least 1
         regex_to_match = re.compile ( r"^.*\..+$" )
 
         if regex_to_match.match ( string_to_test ):
