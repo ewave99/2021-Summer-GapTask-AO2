@@ -4,11 +4,12 @@ import os.path
 
 from .generic import GenericMethods, Species
 
+# Methods for saving to & loading from a CSV file.
 class CSVFileIOMethods ( GenericMethods ):
     def __init__ ( self ):
         super ( CSVFileIOMethods, self ).__init__ ()
 
-    # Methods for saving to CSV
+    # --- Methods for saving to CSV ---
 
     def saveAsCSV ( self ):
         print ( "SAVE AS CSV:" )
@@ -40,15 +41,32 @@ class CSVFileIOMethods ( GenericMethods ):
                 print ( "SAVED." )
                 print ()
 
+    def inputWhetherWantToAddCSVExtension ( self ):
+        user_input = input ( "Add .csv extension [y/n]? " )
+
+        while user_input != 'y' and user_input != 'n':
+            print ( "Invalid option." )
+
+            user_input = input ( "Add .csv extension [y/n]? " )
+
+        if user_input == 'y':
+            return True
+
+        return False
+
     def getFilenameToSaveTo ( self ):
         name_to_save_to = input ( "Enter name to save to: " )
 
         if self.checkFilenameForExtension ( name_to_save_to ) == False:
-            name_to_save_to += ".csv"
+            add_csv_extension = inputWhetherWantToAddCSVExtension ()
+
+            if add_csv_extension == True:
+                name_to_save_to += ".csv"
 
         return name_to_save_to
 
     def checkFilenameForExtension ( self, string_to_test ):
+        # checks for: any string of characters of length at least 0 + . + any string of characters of length at least 1
         regex_to_match = re.compile ( r"^.*\..+$" )
 
         if regex_to_match.match ( string_to_test ):
@@ -56,7 +74,7 @@ class CSVFileIOMethods ( GenericMethods ):
 
         return False
 
-    # Methods for loading from CSV
+    # --- Methods for loading from CSV ---
 
     def loadDataFromCSV ( self ):
         print ( "LOAD DATA FROM CSV FILE:" )
@@ -68,16 +86,26 @@ class CSVFileIOMethods ( GenericMethods ):
         filename_to_load_from = input ( "Enter filename to load from: " )
 
         if os.path.exists ( filename_to_load_from ):
+            # if Append mode, do nothing since we are using the .append method
+            # anyway
             if load_mode_choice == 1:
                 pass
+
+            # if Overwrite method, simply delete all the data first before
+            # appending to the empty list remaining
             elif load_mode_choice == 2:
                 self.species_data.clear ()
 
             with open ( filename_to_load_from, mode='r' ) as file_to_load_from:
                 try:
+                    # specialised csv reader to read in and return each row as
+                    # a dict in the form { "name": ..., "count": ... }
                     csv_reader = csv.DictReader ( file_to_load_from, delimiter=',' )
 
                     for row_dict in csv_reader:
+                        # tried doing Species ( **row_dict )
+                        # but this breaks things as the count is read in as a
+                        # str, so we must convert it explicitly to an int.
                         record = Species ( row_dict [ 'name' ], int ( row_dict [ 'count' ] ) )
                         
                         self.species_data.append ( record )
@@ -85,7 +113,11 @@ class CSVFileIOMethods ( GenericMethods ):
                     print ( "LOADED DATA." )
                     print ()
 
+                # This is for if the file is not in valid CSV file format.
+                # (Or for any other errors)
                 except Exception as error:
+                    # decided to stick to printing the error, since otherwise 
+                    # has proved hard to debug
                     print ( "Error:", error )
                     #print ( "Invalid CSV file." )
                     print ()
