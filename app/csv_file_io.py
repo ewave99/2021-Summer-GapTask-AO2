@@ -37,7 +37,8 @@ class CSVFileIOMethods ( GenericMethods ):
 
                     for record in self.species_data:
                         # converting each record to dict using ._asdict ()
-                        # method of namedtuple class
+                        # method of namedtuple class. Then passing it to the
+                        # csv writer to write as a row of csv
                         csv_writer.writerow ( record._asdict () )
 
                 print ( "SAVED." )

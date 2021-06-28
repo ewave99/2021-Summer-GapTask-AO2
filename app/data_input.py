@@ -2,9 +2,8 @@ import re
 
 from .generic import Species
 
+# Methods to do with inputting species data
 class DataInputMethods:
-    # Methods to do with inputting species data
-
     def inputSpeciesData ( self ):
         current_record = None
 
